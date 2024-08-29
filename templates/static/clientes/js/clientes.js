@@ -48,21 +48,50 @@ function dados_cliente(){
         body: data
 
     }).then(function(result){
+
         return result.json()
+    
     }).then(function(data){
+
         document.getElementById('form_att_cliente').style.display = 'block'
 
         nome = document.getElementById('nome')
-        nome.value = data['nome']
+        nome.value = data['cliente']['nome']
 
         sobrenomenome = document.getElementById('sobrenome')
-        sobrenome.value = data['sobrenome']
+        sobrenome.value = data['cliente']['sobrenome']
 
         cpf = document.getElementById('cpf')
-        cpf.value = data['cpf']
+        cpf.value = data['cliente']['cpf']
 
         email = document.getElementById('email')
-        email.value = data['email']
+        email.value = data['cliente']['email']
+
+        div_carros = document.getElementById('carros')
+        div_carros.innerHTML=""
+
+        for(i=0; i<data['carros'].length; i++){
+            console.log(data['carros'][i]['fields']['carro'])
+            
+            div_carros.innerHTML += "<form action='/clientes/update_carro/"+data['carros'][i]['id']+ "'method='POST'>\
+            <div class='row'>\
+                <div class='col-md'>\
+                    <input class='form-control' type='text' name='carro' value='"+data['carros'][i]['fields']['carro']+"'>\
+                </div>\
+                <div class='col-md'>\
+                    <input class='form-control' type='text' name='placa' value='"+data['carros'][i]['fields']['placa']+"'>\
+                </div>\
+                <div class='col-md'>\
+                    <input class='form-control' type='number' name='ano' value='"+data['carros'][i]['fields']['ano']+"'>\
+                </div>\
+                 <div class='col-md'>\
+                    <input class='btn btn-success' type='submit' value='Salvar Alterações'>\
+                </div>\
+                </form>\
+            </div>\
+            <br>"
+            
+        }
     })
 
 
