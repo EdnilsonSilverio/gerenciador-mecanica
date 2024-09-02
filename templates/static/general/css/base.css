@@ -248,3 +248,7 @@
     display: none;
   }
 }
+.button-group {
+  display: flex;
+  gap: 1.5rem; /* Ajusta o espaçamento entre os botões */
+}

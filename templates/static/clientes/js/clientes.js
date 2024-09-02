@@ -54,7 +54,10 @@ function dados_cliente(){
     }).then(function(data){
 
         document.getElementById('form_att_cliente').style.display = 'block'
-
+        
+        id = document.getElementById('id')
+        id.value = data['cliente_id']
+        
         nome = document.getElementById('nome')
         nome.value = data['cliente']['nome']
 
@@ -71,7 +74,6 @@ function dados_cliente(){
         div_carros.innerHTML=""
 
         for(i=0; i<data['carros'].length; i++){
-            console.log(data['carros'][i]['fields']['carro'])
             
             div_carros.innerHTML += "<form action='/clientes/update_carro/"+data['carros'][i]['id']+ "'method='POST'>\
             <div class='row'>\
@@ -85,16 +87,56 @@ function dados_cliente(){
                     <input class='form-control' type='number' name='ano' value='"+data['carros'][i]['fields']['ano']+"'>\
                 </div>\
                  <div class='col-md'>\
-                    <input class='btn btn-success' type='submit' value='Salvar Alterações'>\
-                </div>\
-                 <div class='col-md'>\
-                    <a class='btn btn-danger' href='/clientes/excluir_carro/"+data['carros'][i]['id']+"'>Excluir</a>\
+                    <div class='button-group'>\
+                        <input class='btn btn-success' type='submit' value='Salvar Alterações'>\
+                        <a class='btn btn-danger' href='/clientes/excluir_carro/"+data['carros'][i]['id']+"'>Excluir</a>\
+                    </div>\
                 </div>\
                 </form>\
             </div>\
             <br>"
             
         }
+    })
+
+
+}   
+
+function update_cliente(){
+
+    nome = document.getElementById('nome').value
+    sobrenome = document.getElementById('sobrenome').value
+    email = document.getElementById('email').value
+    cpf = document.getElementById('cpf').value
+    id = document.getElementById('id').value
+
+    fetch('/clientes/update_cliente/' + id, {
+        method: 'POST',
+        
+        headers: {
+            'X-CSRFToken': csrf_token
+        },
+
+        body: JSON.stringify({
+            nome: nome,
+            sobrenome: sobrenome,
+            email: email,
+            cpf: cpf
+        })
+
+    }).then(function(result){
+        return result.json()
+    }).then(function(data){
+        if (data['status'] == '200'){
+        nome = data['nome']
+        sobrenome = data['sobrenome']
+        email = data['email']
+        cpf = data['cpf']
+        console.log('Dados alterados com sucesso!')
+        }else{
+            console.log('Ocorreu algum erro!')
+        }
+
     })
 
 
